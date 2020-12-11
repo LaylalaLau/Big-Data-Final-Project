@@ -1,0 +1,33 @@
+# Setup the HDFS directory stucture and populate it.
+
+# Upload the dataset and the python scripts.
+mkdir project
+scp /Users/liushuxuan/Desktop/大四上/476/project/Boston/Data\ cleaning/CleanMapper.py sl6166@dumbo.es.its.nyu.edu:/home/sl6166/project
+scp /Users/liushuxuan/Desktop/大四上/476/project/Boston/Data\ cleaning/CleanReducer.py sl6166@dumbo.es.its.nyu.edu:/home/sl6166/project
+scp /Users/liushuxuan/Desktop/大四上/476/project/Boston/Data\ profiling/CountRecsMapper.py sl6166@dumbo.es.its.nyu.edu:/home/sl6166/project
+scp /Users/liushuxuan/Desktop/大四上/476/project/Boston/Data\ profiling/CountRecsReducer.py sl6166@dumbo.es.its.nyu.edu:/home/sl6166/project
+scp /Users/liushuxuan/Desktop/大四上/476/project/Boston/crime.csv sl6166@dumbo.es.its.nyu.edu:/home/sl6166/project
+
+# Create new directory structure in HDFS
+hdfs dfs -mkdir /user/sl6166/project
+hdfs dfs -mkdir /user/sl6166/project/python_code
+
+# Populate the code directory in HDFS and set the file permissions
+hdfs dfs -put  CleanReducer.py project/python_code
+hdfs dfs -put CleanMapper.py project/python_code
+hdfs dfs -chmod a+x project/python_code/CleanMapper.py
+hdfs dfs -chmod a+x project/python_code/CleanReducer.py
+hdfs dfs -put  CountRecsReducer.py project/python_code
+hdfs dfs -put CountRecsMapper.py project/python_code
+hdfs dfs -chmod a+x project/python_code/CountRecsMapper.py
+hdfs dfs -chmod a+x project/python_code/CountRecsReducer.py
+
+# Populate the input directory in HDFS with the input file
+hdfs dfs -put crime.csv /user/sl6166/project
+
+# Verify what is in the code directory
+hdfs dfs -ls project/python_code
+
+# Verify what is in the input data directory
+hdfs dfs -ls project
+

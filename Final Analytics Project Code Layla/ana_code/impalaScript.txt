@@ -1,0 +1,23 @@
+# Create a table
+create external table w1 (OFNS string, TIME int, YEAR int, MONTH int)
+row format delimited fields terminated by ','
+location'/user/sl6166/impalaInput/';
+
+# Create a view with top 20 most frequent crime types
+CREATE VIEW IF NOT EXISTS w2 AS select OFNS, count(OFNS) AS OFNSnum from w1 group by OFNS order by OFNSnum desc limit 20;
+select * from w2;
+
+# Display the number of times each crime occur in different months in descending order. Repeat 20 times with different crime types.
+select month, count(month) AS MONTHnum from w1 where OFNS = 'Medical Assistance: SICK/INJURED/MEDICAL - PERSON' group by month order by MONTHnum desc limit 12;
+select month, count(month) AS MONTHnum from w1 where OFNS = 'Investigate Person: INVESTIGATE PERSON' group by month order by MONTHnum desc limit 12;
+
+# Display the number of times each crime occur at different times in descending order. Repeat 20 times with different crime types.
+select time, count(time) AS TIMEnum from w1 where OFNS = 'Medical Assistance: SICK/INJURED/MEDICAL - PERSON' group by time order by TIMEnum desc limit 25;
+
+# Create a view of months in which crimes happen most frequently.
+CREATE VIEW IF NOT EXISTS w3 AS select month, count(month) AS MONTHnum from w1 group by month order by MONTHnum desc limit 12;
+select * from w3;
+
+# Create a view of times at which crimes happen most frequently.
+CREATE VIEW IF NOT EXISTS w4 AS select time, count(time) AS TIMEnum from w1 group by time order by TIMEnum desc limit 25;
+select * from w4;
